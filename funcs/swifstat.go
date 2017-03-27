@@ -108,6 +108,8 @@ func swIfMetrics() (L []*model.MetricValue) {
 		time.Sleep(5 * time.Millisecond)
 	}
 
+	switcherNames := g.SwitcherNames()
+
 	for _, ch := range chs {
 		chIfStat := <-ch
 
@@ -124,7 +126,12 @@ func swIfMetrics() (L []*model.MetricValue) {
 			for _, ifStat := range *chIfStat.IfStatsList {
 				ifNameTag := "ifName=" + ifStat.IfName
 				ifIndexTag := "ifIndex=" + strconv.Itoa(ifStat.IfIndex)
+
 				ip := chIfStat.Ip
+				if switcherNames != nil && switcherNames[chIfStat.Ip] != nil {
+					ip = switcherNames[chIfStat.Ip].(string)
+				}
+
 				if ignoreOperStatus == false {
 					L = append(L, GaugeValueIp(ifStat.TS, ip, "switch.if.OperStatus", ifStat.IfOperStatus, ifNameTag, ifIndexTag))
 				}
