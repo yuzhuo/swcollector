@@ -6,30 +6,6 @@ import (
 	"strings"
 )
 
-func NewMetricValue(metric string, val interface{}, dataType string, tags ...string) *model.MetricValue {
-	mv := model.MetricValue{
-		Metric: metric,
-		Value:  val,
-		Type:   dataType,
-	}
-
-	size := len(tags)
-
-	if size > 0 {
-		mv.Tags = strings.Join(tags, ",")
-	}
-
-	return &mv
-}
-
-func GaugeValue(metric string, val interface{}, tags ...string) *model.MetricValue {
-	return NewMetricValue(metric, val, "GAUGE", tags...)
-}
-
-func CounterValue(metric string, val interface{}, tags ...string) *model.MetricValue {
-	return NewMetricValue(metric, val, "COUNTER", tags...)
-}
-
 func NewMetricValueIp(TS int64, ip, metric string, val interface{}, dataType string, tags ...string) *model.MetricValue {
 	sec := int64(g.Config().Transfer.Interval)
 
@@ -46,6 +22,13 @@ func NewMetricValueIp(TS int64, ip, metric string, val interface{}, dataType str
 
 	if size > 0 {
 		mv.Tags = strings.Join(tags, ",")
+	}
+
+	switcherNames := g.SwitcherNames()
+	if switcherNames != nil && switcherNames[ip] != nil {
+		mv.Tags += ",namenode=" + switcherNames[ip].(string)
+	} else {
+		mv.Tags += ",namenode=" + ip
 	}
 
 	return &mv

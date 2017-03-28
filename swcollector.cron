@@ -1,1 +1,1 @@
-*/1 * * * * root bash /usr/local/swcollector/start_falcon-swcollector.sh 1>/dev/null 2>&1
+*/5 * * * * root bash /usr/local/swcollector/start_falcon-swcollector.sh 1>/dev/null 2>&1

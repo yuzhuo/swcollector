@@ -121,12 +121,12 @@ func IP() string {
 func ParseMapfile(mapfile string) {
 	if mapfile == "" {
 		log.Println("no mapfile specified.")
-        return
+		return
 	}
 
 	if !file.IsExist(mapfile) {
 		log.Println("mapfile:", mapfile, "is not existent.")
-        return
+		return
 	}
 
 	configContent, err := file.ToTrimString(mapfile)
@@ -165,7 +165,7 @@ func ParseConfig(cfg string) {
 		log.Fatalln("parse config file:", cfg, "fail:", err)
 	}
 
-    ParseMapfile(c.Mapfile)
+	ParseMapfile(c.Mapfile)
 
 	lock.Lock()
 	defer lock.Unlock()
